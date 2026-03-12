@@ -1,69 +1,52 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight, ShieldCheck, Cpu, Package, Activity } from "lucide-react";
+import { ArrowRight, Github, CheckCircle2, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const statCards = [
-  {
-    icon: ShieldCheck,
-    label: "Private by default",
-    value: "Local-only",
-    helper: "No cloud required",
-  },
-  {
-    icon: Cpu,
-    label: "Ollama-ready",
-    value: "Local runtime",
-    helper: "Native integration",
-  },
-  {
-    icon: Package,
-    label: "Model Manager",
-    value: "Install + run",
-    helper: "One-click deploys",
-  },
-  {
-    icon: Activity,
-    label: "System Monitor",
-    value: "CPU / RAM / GPU",
-    helper: "Real-time telemetry",
-  },
+const badges = [
+  { label: "Open Source" },
+  { label: "Runs Locally" },
+  { label: "Powered by Ollama" },
 ];
 
 export function Hero() {
   return (
-    <section className="pt-32 pb-16 px-6">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative pt-44 pb-28 px-6">
+      {/* Hero glow */}
+      <div className="absolute inset-0 pointer-events-none flex justify-center overflow-hidden">
+        <div className="mt-0 w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.18)_0%,transparent_60%)] blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-4xl text-center">
         {/* Status pill */}
-        <div className="mb-8 flex items-center gap-2">
-          <span className="flex items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900/80 px-3 py-1 font-mono text-xs text-zinc-400">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            </span>
-            System operational · v0.1.0-alpha
+        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/60 px-4 py-1.5 backdrop-blur-sm">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          </span>
+          <span className="font-mono text-xs text-zinc-400">
+            v0.1.0-alpha · Open Source
           </span>
         </div>
 
         {/* Headline */}
-        <div className="mb-6 max-w-3xl">
-          <h1 className="font-mono text-5xl font-bold tracking-tight text-zinc-100 sm:text-6xl lg:text-7xl">
-            Local AI
-            <br />
-            <span className="text-zinc-500">Workstation OS</span>
-          </h1>
-        </div>
-
-        <p className="mb-10 max-w-xl text-base text-zinc-400 leading-relaxed">
-          Run models locally. Private by default. Built for speed.
+        <h1 className="mb-6 font-mono text-5xl font-bold tracking-tight text-zinc-100 sm:text-6xl lg:text-7xl leading-[1.08]">
+          Run AI Models
           <br />
-          A full command center for your on-device AI infrastructure.
+          <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
+            Locally. Beautifully.
+          </span>
+        </h1>
+
+        <p className="mb-10 mx-auto max-w-lg text-base text-zinc-400 leading-relaxed">
+          DagOS is an open-source AI workstation for running and managing
+          language models locally with Ollama.
         </p>
 
-        {/* CTA row */}
-        <div className="mb-16 flex flex-wrap items-center gap-3">
+        {/* CTAs */}
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
           <Button
             size="lg"
-            className="h-10 gap-2 border border-zinc-700 bg-zinc-900 px-6 text-sm font-medium text-zinc-100 shadow-lg hover:bg-zinc-800 hover:border-zinc-600 transition-all"
+            className="h-11 gap-2 px-7 font-mono text-sm bg-white text-zinc-950 hover:bg-zinc-100 transition-all shadow-lg shadow-white/5"
             asChild
           >
             <Link href="/app/dashboard">
@@ -72,40 +55,45 @@ export function Hero() {
             </Link>
           </Button>
           <Button
-            variant="ghost"
             size="lg"
-            className="h-10 gap-2 border border-zinc-800 bg-transparent px-6 text-sm font-medium text-zinc-400 hover:bg-zinc-900/60 hover:text-zinc-100 hover:border-zinc-700 transition-all"
+            className="h-11 gap-2 px-7 font-mono text-sm border border-indigo-500/40 bg-indigo-950/30 text-indigo-300 hover:bg-indigo-950/60 hover:border-indigo-500/60 hover:text-indigo-200 transition-all"
             asChild
           >
-            <Link href="/docs">
-              Quickstart
-              <ChevronRight className="h-4 w-4" />
+            <Link href="/demo">
+              <FlaskConical className="h-4 w-4" />
+              Launch Live Demo
             </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            size="lg"
+            className="h-11 gap-2 px-7 font-mono text-sm border border-zinc-800 text-zinc-400 hover:bg-zinc-900/60 hover:text-zinc-100 hover:border-zinc-700 transition-all"
+            asChild
+          >
+            <a
+              href="https://github.com/Martimic10/DagOS"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="h-4 w-4" />
+              View on GitHub
+            </a>
           </Button>
         </div>
 
-        {/* Stat cards row */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {statCards.map((card) => {
-            const Icon = card.icon;
-            return (
-              <div
-                key={card.label}
-                className="flex flex-col gap-2 rounded-2xl border border-zinc-800/70 bg-zinc-950/60 p-4 shadow-sm ring-1 ring-inset ring-white/[0.03] hover:bg-zinc-900/40 transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  <Icon className="h-3.5 w-3.5 text-zinc-500" />
-                  <span className="font-mono text-xs text-zinc-500 uppercase tracking-wider">
-                    {card.label}
-                  </span>
-                </div>
-                <p className="font-mono text-sm font-semibold text-zinc-100">
-                  {card.value}
-                </p>
-                <p className="text-xs text-zinc-600">{card.helper}</p>
-              </div>
-            );
-          })}
+        {/* Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {badges.map((badge, i) => (
+            <span key={badge.label} className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-900/60 px-3 py-1 font-mono text-xs text-zinc-400">
+                <CheckCircle2 className="h-3 w-3 text-emerald-500/80" />
+                {badge.label}
+              </span>
+              {i < badges.length - 1 && (
+                <span className="h-1 w-1 rounded-full bg-zinc-700" />
+              )}
+            </span>
+          ))}
         </div>
       </div>
     </section>

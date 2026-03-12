@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Info, Terminal, ArrowRight, Loader2 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { RuntimePill } from "@/components/app/RuntimePill";
 import { StatCard } from "@/components/app/StatCard";
@@ -261,6 +262,64 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Ollama offline gate — show instead of dashboard content */}
+      {online === null && (
+        <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-zinc-800/60 bg-zinc-900/20 py-24 text-center">
+          <Loader2 className="h-6 w-6 animate-spin text-zinc-600" />
+          <p className="font-mono text-sm text-zinc-500">Connecting to Ollama…</p>
+        </div>
+      )}
+
+      {online === false && (
+        <div className="flex flex-col items-center justify-center gap-6 rounded-xl border border-zinc-800/60 bg-zinc-900/20 py-24 text-center px-8">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900">
+            <Terminal className="h-5 w-5 text-zinc-600" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="font-mono text-lg font-semibold text-zinc-200">Ollama is not running</h2>
+            <p className="font-mono text-sm text-zinc-500 max-w-sm">
+              DagOS requires a local Ollama runtime to load your models and data.
+              Start Ollama to continue.
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <div className="rounded-lg border border-zinc-800 bg-zinc-950 px-5 py-3 text-left">
+              <p className="font-mono text-[11px] text-zinc-600 mb-1.5">Start Ollama</p>
+              <code className="font-mono text-sm text-zinc-300">ollama serve</code>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={refresh}
+                disabled={refreshing}
+                className="h-8 gap-1.5 border border-zinc-800 bg-transparent font-mono text-xs text-zinc-500 hover:bg-zinc-900/60 hover:text-zinc-300 hover:border-zinc-700 disabled:opacity-40"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+                Retry connection
+              </Button>
+              <Link
+                href="/docs"
+                className="inline-flex items-center gap-1.5 font-mono text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+              >
+                Setup guide
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {online === true && (
+        <>
+          {/* Info banner */}
+          <div className="flex items-center gap-2.5 rounded-lg border border-zinc-800 bg-zinc-900/40 px-4 py-2.5">
+            <Info className="h-3.5 w-3.5 flex-shrink-0 text-zinc-600" />
+            <p className="font-mono text-xs text-zinc-500">
+              DagOS runs locally on your machine and connects to Ollama for AI model execution.
+            </p>
+          </div>
+
       {/* KPI stat cards */}
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {statCards.map((card) => (
@@ -441,6 +500,8 @@ export default function DashboardPage() {
 
       {/* Activity table */}
       <ActivityTable rows={recentActivity} />
+        </>
+      )}
     </div>
   );
 }
