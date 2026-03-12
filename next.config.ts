@@ -1,8 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "recharts",
+      "simple-icons",
+      "@lobehub/icons",
+    ],
+  },
 };
 
 export default nextConfig;
