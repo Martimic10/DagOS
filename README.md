@@ -23,16 +23,16 @@ DagOS provides a dashboard-style interface for local AI development powered by [
 ## Screenshots
 
 ### Landing Page
-![Landing Page](./screenshots/landing.png)
+![Landing Page](./public/screenshots/landing.png)
 
 ### Dashboard
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](./public/screenshots/dashboard.png)
 
 ### Chat Interface
-![Chat Interface](./screenshots/chat.png)
+![Chat Interface](./public/screenshots/chat.png)
 
 ### Model Library
-![Model Library](./screenshots/models.png)
+![Model Library](./public/screenshots/models.png)
 
 ---
 
