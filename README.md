@@ -1,4 +1,4 @@
-# DagOS
+# DagOS🛸
 
 > A modern local AI workstation OS for running, managing, and interacting with AI models locally.
 
