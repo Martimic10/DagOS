@@ -5,8 +5,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Search, Bell, Settings, ChevronDown, Filter, Check, User, SlidersHorizontal,
   LayoutDashboard, MessageSquare, Cpu, FileText, Monitor, ArrowRight, Clock,
-  CheckCircle2, XCircle, Package, Trash2,
+  CheckCircle2, XCircle, Package, Trash2, Sun, Moon,
 } from "lucide-react";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { loadProfile, saveProfile, displayName, displayInitial } from "@/lib/local-profile";
 import { loadActivityLog, type ActivityEvent } from "@/lib/activity-log";
 import { Button } from "@/components/ui/button";
@@ -135,6 +136,7 @@ function ToggleRow({
 // ── Topbar ────────────────────────────────────────────────────────────────────
 
 export function Topbar() {
+  const { theme, toggle: toggleTheme } = useTheme();
   const pathname     = usePathname();
   const router       = useRouter();
   const searchParams = useSearchParams();
@@ -279,7 +281,7 @@ export function Topbar() {
 
   return (
     <>
-      <header className="fixed left-56 right-0 top-0 z-30 flex h-14 items-center gap-4 border-b border-zinc-800/70 bg-zinc-950/90 px-5 backdrop-blur-sm">
+      <header className="fixed left-56 right-0 top-8 z-30 flex h-14 items-center gap-4 border-b border-zinc-800/70 bg-zinc-950/90 px-5 backdrop-blur-sm">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2">
           <span className="font-mono text-xs text-zinc-600">DagOS</span>
@@ -290,7 +292,7 @@ export function Topbar() {
         {/* Search trigger */}
         <div
           className="relative ml-4 flex-1 max-w-sm cursor-pointer"
-          onClick={() => setSearchOpen(true)}
+          onClick={() => window.dispatchEvent(new CustomEvent("dagos:openCommandPalette"))}
         >
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-600" />
           <div className="flex h-8 items-center justify-between rounded-md border border-zinc-800 bg-zinc-900/60 px-8 font-mono text-xs text-zinc-700 hover:border-zinc-700 hover:bg-zinc-900 transition-colors">
@@ -468,6 +470,20 @@ export function Topbar() {
               )}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Theme toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="h-8 w-8 text-zinc-500 hover:bg-zinc-900/60 hover:text-zinc-300 transition-transform duration-300"
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark"
+              ? <Sun  className="h-4 w-4 transition-transform duration-300 rotate-0" />
+              : <Moon className="h-4 w-4 transition-transform duration-300 rotate-180" />
+            }
+          </Button>
 
           {/* Settings icon */}
           <Button

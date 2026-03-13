@@ -1,7 +1,13 @@
 // Activity log — persisted to localStorage under dagos_activity_log
 
-export type ActivityRoute = "chat" | "models" | "dashboard";
-export type ActivityAction = "chat_request" | "model_run" | "model_delete" | "model_install";
+export type ActivityRoute = "chat" | "models" | "dashboard" | "files" | "system";
+export type ActivityAction =
+  | "chat_request"
+  | "model_run"
+  | "model_delete"
+  | "model_install"
+  | "file_analyze"
+  | "runtime_start";
 export type ActivityStatus = "success" | "error";
 
 export interface ActivityEvent {

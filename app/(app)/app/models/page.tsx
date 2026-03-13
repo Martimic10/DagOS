@@ -14,6 +14,13 @@ import {
   CheckCircle2,
   Search,
 } from "lucide-react";
+import Meta from "@lobehub/icons/es/Meta";
+import Mistral from "@lobehub/icons/es/Mistral";
+import Gemma from "@lobehub/icons/es/Gemma";
+import Qwen from "@lobehub/icons/es/Qwen";
+import DeepSeek from "@lobehub/icons/es/DeepSeek";
+import HuggingFace from "@lobehub/icons/es/HuggingFace";
+import Microsoft from "@lobehub/icons/es/Microsoft";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -45,8 +52,10 @@ interface LibraryModel {
   description: string;
   useCase: string;
   sizeLabel: string;
+  sizeGB: number;
   category: ModelCategory;
   paramLabel: string;
+  Icon: React.ComponentType<{ size?: number }>;
 }
 
 const LIBRARY_MODELS: LibraryModel[] = [
@@ -57,8 +66,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Meta's flagship open model with strong reasoning, chat, and broad instruction following.",
     useCase: "General assistant · writing · analysis",
     sizeLabel: "~4.7 GB",
+    sizeGB: 4.7,
     category: "General",
     paramLabel: "8B",
+    Icon: Meta.Color,
   },
   {
     id: "mistral",
@@ -67,8 +78,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Fast, efficient open-source LLM from Mistral AI. Punches above its weight class.",
     useCase: "Chat · summarization · Q&A",
     sizeLabel: "~4.1 GB",
+    sizeGB: 4.1,
     category: "General",
     paramLabel: "7B",
+    Icon: Mistral.Color,
   },
   {
     id: "gemma2",
@@ -77,8 +90,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Google's Gemma 2 — strong benchmark performance and clean instruction following.",
     useCase: "Instruction tasks · coding help · reasoning",
     sizeLabel: "~5.5 GB",
+    sizeGB: 5.5,
     category: "General",
     paramLabel: "9B",
+    Icon: Gemma.Color,
   },
   {
     id: "qwen2.5",
@@ -87,8 +102,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Alibaba's multilingual powerhouse with strong multilingual and reasoning capabilities.",
     useCase: "Multilingual tasks · reasoning · tools",
     sizeLabel: "~4.4 GB",
+    sizeGB: 4.4,
     category: "General",
     paramLabel: "7B",
+    Icon: Qwen.Color,
   },
   {
     id: "deepseek-coder",
@@ -97,8 +114,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Purpose-built for software engineering — code generation, debugging, and explanation.",
     useCase: "Code completion · debugging · review",
     sizeLabel: "~3.8 GB",
+    sizeGB: 3.8,
     category: "Coding",
     paramLabel: "6.7B",
+    Icon: DeepSeek.Color,
   },
   {
     id: "codellama",
@@ -107,8 +126,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Meta's code-specialized Llama variant, fine-tuned on a massive code corpus.",
     useCase: "Code generation · infill · code chat",
     sizeLabel: "~3.8 GB",
+    sizeGB: 3.8,
     category: "Coding",
     paramLabel: "7B",
+    Icon: Meta.Color,
   },
   {
     id: "starcoder2",
@@ -117,8 +138,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Trained on 600+ programming languages from The Stack v2. Polyglot by design.",
     useCase: "Polyglot coding · completion · docs",
     sizeLabel: "~3.8 GB",
+    sizeGB: 3.8,
     category: "Coding",
     paramLabel: "7B",
+    Icon: HuggingFace.Color,
   },
   {
     id: "phi3",
@@ -127,8 +150,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Microsoft's surprisingly capable compact model. Great quality-per-GB ratio.",
     useCase: "Fast responses · edge devices · prototyping",
     sizeLabel: "~2.3 GB",
+    sizeGB: 2.3,
     category: "Lightweight",
     paramLabel: "3.8B",
+    Icon: Microsoft.Color,
   },
   {
     id: "tinyllama",
@@ -137,8 +162,10 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "1.1B parameter Llama variant. Ultra-fast with a near-zero memory footprint.",
     useCase: "Embedded use · rapid iteration · testing",
     sizeLabel: "~0.6 GB",
+    sizeGB: 0.6,
     category: "Lightweight",
     paramLabel: "1.1B",
+    Icon: Meta.Color,
   },
   {
     id: "llama3.2",
@@ -147,12 +174,15 @@ const LIBRARY_MODELS: LibraryModel[] = [
     description: "Meta's compact 3B Llama 3.2 — smaller footprint, still surprisingly capable.",
     useCase: "Lightweight assistant · on-device use",
     sizeLabel: "~2.0 GB",
+    sizeGB: 2.0,
     category: "Lightweight",
     paramLabel: "3B",
+    Icon: Meta.Color,
   },
 ];
 
 const CATEGORIES: Array<ModelCategory | "All"> = ["All", "General", "Coding", "Lightweight"];
+const MAX_MODEL_SIZE_GB = Math.max(...LIBRARY_MODELS.map((m) => m.sizeGB));
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -362,16 +392,29 @@ function LibraryCard({
         >
           {model.category}
         </span>
-        <span className="font-mono text-[10px] text-zinc-700">{model.sizeLabel}</span>
+        <span className="font-mono text-[10px] text-zinc-600">{model.sizeLabel}</span>
+      </div>
+
+      {/* Storage bar */}
+      <div className="h-1 w-full overflow-hidden rounded-full bg-zinc-800/80">
+        <div
+          className="h-full rounded-full bg-linear-to-r from-indigo-500 to-purple-500 transition-all duration-700 ease-out"
+          style={{ width: `${Math.round((model.sizeGB / MAX_MODEL_SIZE_GB) * 100)}%` }}
+        />
       </div>
 
       {/* Model name + param label */}
       <div>
-        <div className="flex items-baseline gap-2">
-          <h3 className="font-mono text-sm font-semibold text-zinc-100">{model.name}</h3>
-          <span className="font-mono text-[10px] text-zinc-600">{model.paramLabel}</span>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-zinc-800/80 bg-zinc-900/80">
+            <model.Icon size={18} />
+          </div>
+          <div className="flex items-baseline gap-2 min-w-0">
+            <h3 className="font-mono text-sm font-semibold text-zinc-100 truncate">{model.name}</h3>
+            <span className="font-mono text-[10px] text-zinc-600 shrink-0">{model.paramLabel}</span>
+          </div>
         </div>
-        <p className="mt-1.5 font-mono text-xs leading-relaxed text-zinc-500">
+        <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-500">
           {model.description}
         </p>
       </div>

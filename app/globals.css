@@ -164,6 +164,54 @@
   to { transform: translateX(0); }
 }
 
+/* ── Light mode — remap zinc token scale + shadcn CSS vars ───────────────── */
+html.light {
+  /* Invert the zinc scale so dark-coded components flip to light */
+  --color-zinc-950: oklch(1    0 0);        /* was near-black  → white         */
+  --color-zinc-900: oklch(0.985 0 0);       /* was very dark   → zinc-50       */
+  --color-zinc-800: oklch(0.96  0 0);       /* was dark        → zinc-100      */
+  --color-zinc-700: oklch(0.90  0 0);       /* was dark-mid    → zinc-200 ish  */
+  --color-zinc-600: oklch(0.50  0 0);       /* muted           → keep mid-gray */
+  --color-zinc-500: oklch(0.45  0 0);       /* keep mid-gray                   */
+  --color-zinc-400: oklch(0.40  0 0);       /* was light-mid   → dark-mid      */
+  --color-zinc-300: oklch(0.30  0 0);       /* was light       → darker        */
+  --color-zinc-200: oklch(0.22  0 0);       /* was very light  → dark          */
+  --color-zinc-100: oklch(0.14  0 0);       /* was near-white  → near-black    */
+
+  /* shadcn/ui semantic tokens */
+  --background:              oklch(1    0 0);
+  --foreground:              oklch(0.14 0 0);
+  --card:                    oklch(0.985 0 0);
+  --card-foreground:         oklch(0.14 0 0);
+  --popover:                 oklch(0.985 0 0);
+  --popover-foreground:      oklch(0.14 0 0);
+  --primary:                 oklch(0.14 0 0);
+  --primary-foreground:      oklch(0.985 0 0);
+  --secondary:               oklch(0.96 0 0);
+  --secondary-foreground:    oklch(0.14 0 0);
+  --muted:                   oklch(0.96 0 0);
+  --muted-foreground:        oklch(0.45 0 0);
+  --accent:                  oklch(0.96 0 0);
+  --accent-foreground:       oklch(0.14 0 0);
+  --destructive:             oklch(0.58 0.22 22);
+  --border:                  oklch(0 0 0 / 10%);
+  --input:                   oklch(0 0 0 / 12%);
+  --ring:                    oklch(0.45 0 0);
+  --sidebar:                 oklch(0.985 0 0);
+  --sidebar-foreground:      oklch(0.14 0 0);
+  --sidebar-primary:         oklch(0.14 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent:          oklch(0.96 0 0);
+  --sidebar-accent-foreground: oklch(0.14 0 0);
+  --sidebar-border:          oklch(0 0 0 / 10%);
+  --sidebar-ring:            oklch(0.45 0 0);
+}
+
+/* Body bg/text transition when switching themes */
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
