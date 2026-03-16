@@ -10,6 +10,7 @@ import {
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { loadProfile, saveProfile, displayName, displayInitial } from "@/lib/local-profile";
 import { loadActivityLog, type ActivityEvent } from "@/lib/activity-log";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -164,14 +165,31 @@ export function Topbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // ── Load profile ─────────────────────────────────────────────────────────────
+  // ── Load profile (Supabase user takes priority over local profile) ────────────
   useEffect(() => {
     const sync = () => {
       const p = loadProfile();
       setName(displayName(p));
       setInitial(displayInitial(p));
     };
-    sync();
+
+    // Try Supabase first
+    createClient()
+      .auth.getUser()
+      .then(({ data: { user } }) => {
+        if (user) {
+          const firstName =
+            (user.user_metadata?.first_name as string | undefined) ||
+            user.email?.split("@")[0] ||
+            "User";
+          setName(firstName);
+          setInitial(firstName[0]?.toUpperCase() ?? "U");
+        } else {
+          sync();
+        }
+      })
+      .catch(() => sync());
+
     window.addEventListener("storage", sync);
     return () => window.removeEventListener("storage", sync);
   }, []);
@@ -544,7 +562,15 @@ export function Topbar() {
               </DropdownMenuItem>
 
               <DropdownMenuSeparator className="bg-zinc-800" />
-              <DropdownMenuItem className="text-zinc-600 focus:bg-zinc-900 focus:text-zinc-400">
+              <DropdownMenuItem
+                onSelect={async () => {
+                  const supabase = createClient();
+                  await supabase.auth.signOut();
+                  router.push("/login");
+                  router.refresh();
+                }}
+                className="cursor-pointer text-zinc-600 focus:bg-zinc-900 focus:text-zinc-400 hover:text-zinc-400"
+              >
                 Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>

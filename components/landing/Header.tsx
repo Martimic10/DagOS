@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Docs", href: "/docs" },
-  { label: "Releases", href: "https://github.com/Martimic10/DagOS", external: true },
+  { label: "Pricing", href: "/pricing" },
   { label: "GitHub", href: "https://github.com/Martimic10/DagOS", external: true, icon: true },
 ];
 
@@ -87,14 +87,20 @@ export function Header() {
           )}
         </nav>
 
-        {/* Desktop CTA + Mobile hamburger */}
+        {/* Desktop CTAs + Mobile hamburger */}
         <div className="flex items-center gap-2">
+          <Link
+            href="/login"
+            className="hidden md:flex h-8 items-center px-4 font-mono text-xs text-zinc-400 hover:text-zinc-100 transition-colors"
+          >
+            Log In
+          </Link>
           <Button
             size="sm"
             className="hidden md:flex h-8 px-4 font-mono text-xs bg-white text-zinc-950 hover:bg-zinc-200 transition-colors"
             asChild
           >
-            <Link href="/docs">Run DagOS</Link>
+            <Link href="/signup">Get Started</Link>
           </Button>
 
           <button
@@ -135,14 +141,21 @@ export function Header() {
                 </Link>
               )
             )}
-            <div className="pt-3">
+            <div className="pt-3 flex flex-col gap-2">
+              <Link
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="flex h-9 items-center justify-center rounded-md border border-zinc-800 bg-zinc-900/60 font-mono text-sm text-zinc-300 hover:text-zinc-100 transition-colors"
+              >
+                Log In
+              </Link>
               <Button
                 size="sm"
                 className="w-full h-9 font-mono text-xs bg-white text-zinc-950 hover:bg-zinc-200 transition-colors"
                 asChild
               >
-                <Link href="/docs" onClick={() => setMenuOpen(false)}>
-                  Run DagOS
+                <Link href="/signup" onClick={() => setMenuOpen(false)}>
+                  Get Started
                 </Link>
               </Button>
             </div>

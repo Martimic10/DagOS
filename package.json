@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@lobehub/icons": "^5.0.1",
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.99.2",
     "@types/pdf-parse": "^1.1.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -22,6 +24,7 @@
     "react-dom": "19.2.3",
     "recharts": "^3.7.0",
     "simple-icons": "^16.10.0",
+    "stripe": "^20.4.1",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {

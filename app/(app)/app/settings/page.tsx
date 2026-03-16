@@ -12,12 +12,18 @@ import {
   CheckCircle2,
   XCircle,
   Loader2,
+  Zap,
+  FlaskConical,
+  ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { loadProfile, saveProfile, displayInitial } from "@/lib/local-profile";
 import { loadPrefs, savePrefs, DEFAULT_PREFS, type Prefs } from "@/lib/preferences";
 import { cn } from "@/lib/utils";
+import { usePlan } from "@/hooks/usePlan";
+import { enableProOverride, disableProOverride, getProOverride } from "@/lib/plan";
 
 // ── Shared sub-components ─────────────────────────────────────────────────────
 
@@ -121,6 +127,27 @@ type ConnState = "idle" | "checking" | "ok" | "err";
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function SettingsPage() {
+  // Plan
+  const { isPro, refresh: refreshPlan } = usePlan();
+  const [proOverride, setProOverride] = useState(false);
+
+  useEffect(() => {
+    setProOverride(getProOverride());
+    window.addEventListener("dagos:plan-changed", () => setProOverride(getProOverride()));
+  }, []);
+
+  function handleEnablePro() {
+    enableProOverride();
+    setProOverride(true);
+    refreshPlan();
+  }
+
+  function handleDisablePro() {
+    disableProOverride();
+    setProOverride(false);
+    refreshPlan();
+  }
+
   // Profile
   const [firstName, setFirstName] = useState("");
   const [profileSaved, setProfileSaved] = useState(false);
@@ -352,6 +379,115 @@ export default function SettingsPage() {
             <span className="font-mono text-[10px] text-zinc-600">
               DagOS proxies all Ollama requests through <code className="text-zinc-500">/api/ollama/*</code> — no CORS issues.
             </span>
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* ── Current Plan ───────────────────────────────────────────────────── */}
+      <SectionCard icon={Zap} title="Current Plan" subtitle="subscription">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between rounded-xl border border-zinc-800/50 bg-zinc-900/30 px-4 py-3.5">
+            <div className="flex items-center gap-3">
+              <div className={cn(
+                "flex h-7 w-7 items-center justify-center rounded-lg border",
+                isPro
+                  ? "border-indigo-800/50 bg-indigo-950/60"
+                  : "border-zinc-700 bg-zinc-800/60"
+              )}>
+                <Zap className={cn("h-3.5 w-3.5", isPro ? "text-indigo-400" : "text-zinc-500")} />
+              </div>
+              <div>
+                <p className="font-mono text-xs font-semibold text-zinc-200">
+                  {isPro ? "Pro" : "Free"}
+                </p>
+                <p className="font-mono text-[10px] text-zinc-600">
+                  {isPro ? "All features unlocked" : "Free tier — limited features"}
+                </p>
+              </div>
+            </div>
+            {isPro ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-950/40 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-indigo-400">
+                <span className="h-1 w-1 rounded-full bg-indigo-400" />
+                Active
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 rounded border border-zinc-700/60 bg-zinc-900/40 px-2 py-0.5 font-mono text-[10px] text-zinc-500">
+                Free
+              </span>
+            )}
+          </div>
+
+          {!isPro && (
+            <div className="flex items-center justify-between rounded-xl border border-indigo-900/30 bg-indigo-950/20 px-4 py-3">
+              <div>
+                <p className="font-mono text-xs font-medium text-zinc-300">
+                  Upgrade to Pro
+                </p>
+                <p className="font-mono text-[10px] text-zinc-600">
+                  Unlock Model Playground, benchmarking, and more.
+                </p>
+              </div>
+              <Button
+                size="sm"
+                className="h-8 gap-1.5 shrink-0 bg-white font-mono text-xs text-zinc-950 hover:bg-zinc-100"
+                asChild
+              >
+                <Link href="/pricing">
+                  Upgrade
+                  <ArrowRight className="h-3 w-3" />
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+      </SectionCard>
+
+      {/* ── Pro Preview (dev toggle) ────────────────────────────────────────── */}
+      <SectionCard
+        icon={FlaskConical}
+        title="Pro Preview"
+        subtitle="testing only"
+      >
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2 rounded-lg border border-amber-900/30 bg-amber-950/20 px-3.5 py-2.5">
+            <span className="font-mono text-[10px] text-amber-600/80">
+              Testing only — replace with Stripe billing later
+            </span>
+          </div>
+
+          <p className="font-mono text-[11px] leading-relaxed text-zinc-500">
+            Enable or disable Pro features for testing inside DagOS Desktop.
+            This overrides the Supabase plan check locally.
+          </p>
+
+          <div className="flex items-center justify-between rounded-xl border border-zinc-800/50 bg-zinc-900/30 px-4 py-3">
+            <div>
+              <p className="font-mono text-xs font-medium text-zinc-300">Pro Preview</p>
+              <p className="font-mono text-[10px] text-zinc-600">
+                {proOverride ? "Pro features are currently enabled" : "Pro features are currently disabled"}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              {proOverride ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleDisablePro}
+                  className="h-8 gap-1.5 border border-zinc-800 bg-transparent font-mono text-xs text-zinc-500 hover:bg-zinc-900/60 hover:text-zinc-300 hover:border-zinc-700"
+                >
+                  Disable Pro Preview
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleEnablePro}
+                  className="h-8 gap-1.5 border border-indigo-900/60 bg-indigo-950/30 font-mono text-xs text-indigo-400 hover:bg-indigo-950/50 hover:border-indigo-800/60"
+                >
+                  Enable Pro Preview
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </SectionCard>

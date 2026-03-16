@@ -35,8 +35,8 @@ export function FinalCTA() {
                 className="h-11 gap-2 px-7 font-mono text-sm bg-white text-zinc-950 hover:bg-zinc-100 transition-all shadow-lg shadow-white/10"
                 asChild
               >
-                <Link href="/app/dashboard">
-                  Open Dashboard
+                <Link href="/signup">
+                  Get Started
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>

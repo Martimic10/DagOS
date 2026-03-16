@@ -1,5 +1,6 @@
 import { Header } from "@/components/landing/Header";
 import { Hero } from "@/components/landing/Hero";
+import { InteractiveDemo } from "@/components/landing/InteractiveDemo";
 import { Features } from "@/components/landing/Features";
 import { UseCases } from "@/components/landing/UseCases";
 import { Screenshots } from "@/components/landing/Screenshots";
@@ -21,6 +22,7 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
+        <InteractiveDemo />
         <Features />
         <UseCases />
         <Screenshots />

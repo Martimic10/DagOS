@@ -11,6 +11,7 @@ import { BentoCard } from "@/components/app/BentoCard";
 import { MonoBarChart } from "@/components/app/charts/MonoBarChart";
 import { MonoHBarChart } from "@/components/app/charts/MonoHBarChart";
 import { ActivityTable } from "@/components/app/ActivityTable";
+import { DesktopSetupCard } from "@/components/app/DesktopSetupCard";
 import { loadActivityLog, type ActivityEvent } from "@/lib/activity-log";
 import type { OllamaModel } from "@/app/api/ollama/models/route";
 import type { RunningModel } from "@/app/api/ollama/running/route";
@@ -227,6 +228,9 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Desktop onboarding — only visible inside the Electron shell */}
+      <DesktopSetupCard />
+
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>

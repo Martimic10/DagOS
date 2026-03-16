@@ -17,6 +17,9 @@ import {
   Check,
   Menu,
   X,
+  Download,
+  Monitor,
+  Apple,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +31,7 @@ const nav = [
     icon: Zap,
     items: [
       { id: "introduction",   label: "Introduction" },
+      { id: "download",       label: "Download the App" },
       { id: "prerequisites",  label: "Prerequisites" },
       { id: "installation",   label: "Installation" },
       { id: "first-run",      label: "First Run" },
@@ -66,6 +70,7 @@ const nav = [
 
 const tocItems = [
   { id: "introduction",        label: "Introduction" },
+  { id: "download",            label: "Download the App" },
   { id: "prerequisites",       label: "Prerequisites" },
   { id: "installation",        label: "Installation" },
   { id: "first-run",           label: "First Run" },
@@ -424,6 +429,78 @@ export default function DocsPage() {
           <DocCallout type="tip">
             DagOS v0.1 is in alpha. APIs and UI may change between releases.
           </DocCallout>
+
+          {/* Download the App */}
+          <DocH2 id="download">Download the App</DocH2>
+          <DocP>
+            DagOS is available as a native desktop application built with Electron. The desktop app
+            wraps the full DagOS dashboard and launches directly into your workspace — no browser
+            needed. It uses the same Supabase auth as the web version, so your account works
+            everywhere.
+          </DocP>
+          <DocCallout type="tip">
+            The desktop app is the recommended way to run DagOS. It opens straight into the
+            dashboard and handles Ollama setup for you.
+          </DocCallout>
+
+          {/* Download cards */}
+          <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* macOS */}
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-5">
+              <div className="mb-3 flex items-center gap-2.5">
+                <Apple className="h-4 w-4 text-zinc-400" />
+                <span className="font-mono text-sm font-semibold text-zinc-200">macOS</span>
+              </div>
+              <p className="mb-4 font-mono text-[11px] text-zinc-600 leading-relaxed">
+                macOS 13 Ventura or later. Apple Silicon and Intel both supported.
+              </p>
+              <a
+                href="https://github.com/Martimic10/DagOS/releases"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800/60 px-3 py-2 font-mono text-xs text-zinc-300 transition-colors hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Download for macOS
+                <ExternalLink className="h-3 w-3 text-zinc-600" />
+              </a>
+            </div>
+
+            {/* Windows / Linux */}
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-5">
+              <div className="mb-3 flex items-center gap-2.5">
+                <Monitor className="h-4 w-4 text-zinc-400" />
+                <span className="font-mono text-sm font-semibold text-zinc-200">
+                  Windows &amp; Linux
+                </span>
+              </div>
+              <p className="mb-4 font-mono text-[11px] text-zinc-600 leading-relaxed">
+                Windows 10+ and Ubuntu 22+. Builds coming soon in v0.2.
+              </p>
+              <span className="inline-flex items-center gap-2 rounded-lg border border-zinc-800/60 bg-zinc-900/30 px-3 py-2 font-mono text-xs text-zinc-600">
+                Coming in v0.2
+              </span>
+            </div>
+          </div>
+
+          <DocCallout type="info">
+            Releases are published on{" "}
+            <a
+              href="https://github.com/Martimic10/DagOS/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-zinc-300 transition-colors"
+            >
+              GitHub Releases
+            </a>
+            . DagOS is currently in alpha — expect frequent updates.
+          </DocCallout>
+
+          <DocP>
+            After downloading, open the <DocCode>.dmg</DocCode> file, drag DagOS to your
+            Applications folder, and launch it. The app will open directly into the dashboard. If
+            Ollama isn&apos;t set up yet, you&apos;ll see the guided setup wizard.
+          </DocP>
 
           {/* Prerequisites */}
           <DocH2 id="prerequisites">Prerequisites</DocH2>

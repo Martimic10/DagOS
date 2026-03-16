@@ -11,20 +11,23 @@ import {
   Settings,
   HelpCircle,
   BookOpen,
+  FlaskConical,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePlan } from "@/hooks/usePlan";
 
 const navItems = [
   { label: "Dashboard", href: "/app/dashboard", icon: LayoutDashboard },
-  { label: "Models", href: "/app/models", icon: Package },
-  { label: "Chat", href: "/app/chat", icon: MessageSquare },
-  { label: "Files", href: "/app/files", icon: FileText },
-  { label: "System", href: "/app/system", icon: Activity },
-  { label: "Settings", href: "/app/settings", icon: Settings },
+  { label: "Models",    href: "/app/models",    icon: Package },
+  { label: "Chat",      href: "/app/chat",       icon: MessageSquare },
+  { label: "Files",     href: "/app/files",      icon: FileText },
+  { label: "System",    href: "/app/system",     icon: Activity },
+  { label: "Settings",  href: "/app/settings",   icon: Settings },
 ];
 
 export function Sidebar() {
-  const pathname = usePathname();
+  const pathname     = usePathname();
+  const { isPro }    = usePlan();
 
   return (
     <aside className="fixed bottom-0 left-0 top-8 z-40 flex w-56 flex-col border-r border-zinc-800/70 bg-zinc-950">
@@ -47,7 +50,7 @@ export function Sidebar() {
           Navigation
         </p>
         {navItems.map((item) => {
-          const Icon = item.icon;
+          const Icon   = item.icon;
           const active = pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
@@ -60,19 +63,44 @@ export function Sidebar() {
                   : "text-zinc-500 hover:bg-zinc-900/60 hover:text-zinc-300"
               )}
             >
-              <Icon
-                className={cn(
-                  "h-4 w-4 flex-shrink-0",
-                  active ? "text-zinc-300" : "text-zinc-600"
-                )}
-              />
+              <Icon className={cn("h-4 w-4 flex-shrink-0", active ? "text-zinc-300" : "text-zinc-600")} />
               {item.label}
-              {active && (
-                <span className="ml-auto h-1 w-1 rounded-full bg-zinc-400" />
-              )}
+              {active && <span className="ml-auto h-1 w-1 rounded-full bg-zinc-400" />}
             </Link>
           );
         })}
+
+        {/* Divider before Pro section */}
+        <div className="my-2 border-t border-zinc-800/50" />
+        <p className="mb-1 px-2 font-mono text-[10px] uppercase tracking-widest text-zinc-700">
+          Pro Features
+        </p>
+
+        {/* Playground */}
+        {(() => {
+          const active = pathname === "/app/playground" || pathname.startsWith("/app/playground/");
+          return (
+            <Link
+              href="/app/playground"
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 font-mono text-sm transition-colors",
+                active
+                  ? "bg-zinc-800/80 text-zinc-100"
+                  : "text-zinc-500 hover:bg-zinc-900/60 hover:text-zinc-300"
+              )}
+            >
+              <FlaskConical className={cn("h-4 w-4 flex-shrink-0", active ? "text-zinc-300" : "text-zinc-600")} />
+              Playground
+              {!isPro ? (
+                <span className="ml-auto rounded border border-indigo-900/60 bg-indigo-950/40 px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-indigo-500">
+                  Pro
+                </span>
+              ) : (
+                active && <span className="ml-auto h-1 w-1 rounded-full bg-zinc-400" />
+              )}
+            </Link>
+          );
+        })()}
       </nav>
 
       {/* Bottom area */}
@@ -97,9 +125,7 @@ export function Sidebar() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
           </span>
-          <span className="font-mono text-[10px] text-zinc-600">
-            All systems operational
-          </span>
+          <span className="font-mono text-[10px] text-zinc-600">All systems operational</span>
         </div>
       </div>
     </aside>
