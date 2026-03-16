@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { X, Check, Zap, ArrowRight, Loader2 } from "lucide-react";
+import { X, Check, Zap, ArrowRight } from "lucide-react";
+import { enableProOverride } from "@/lib/plan";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -38,26 +38,9 @@ interface PricingModalProps {
 }
 
 export function PricingModal({ open, onOpenChange, featureName }: PricingModalProps) {
-  const [loading, setLoading] = useState(false);
-
-  async function handleUpgrade() {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/stripe/checkout", { method: "POST" });
-      const { url } = await res.json();
-      if (!url) { setLoading(false); return; }
-
-      // In Electron, open Stripe in the system browser via setWindowOpenHandler.
-      // In the browser, navigate the current tab (standard Stripe checkout flow).
-      if (window.dagosDesktop?.isDesktop) {
-        window.open(url, "_blank");
-        setLoading(false);
-      } else {
-        window.location.href = url;
-      }
-    } catch {
-      setLoading(false);
-    }
+  function handleUpgrade() {
+    enableProOverride();
+    onOpenChange(false);
   }
 
   return (
@@ -161,15 +144,10 @@ export function PricingModal({ open, onOpenChange, featureName }: PricingModalPr
                 <div className="relative mt-5">
                   <Button
                     onClick={handleUpgrade}
-                    disabled={loading}
-                    className="w-full h-9 gap-2 bg-white font-mono text-xs font-semibold text-zinc-950 hover:bg-zinc-100 shadow-lg shadow-white/5 transition-all disabled:opacity-60"
+                    className="w-full h-9 gap-2 bg-white font-mono text-xs font-semibold text-zinc-950 hover:bg-zinc-100 shadow-lg shadow-white/5 transition-all"
                   >
-                    {loading ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    ) : (
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    )}
-                    {loading ? "Redirecting…" : "Upgrade to Pro"}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                    Upgrade to Pro
                   </Button>
                 </div>
               </div>
